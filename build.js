@@ -6,7 +6,7 @@ const artLocal = './node_modules/stremio-art/'
 const allImages = fs.readdirSync(path.join(artLocal, 'originals'))
 const allThumbnails = fs.readdirSync(path.join(artLocal, 'thumbnails'))
 
-const artRemote = 'https://github.com/Stremio/stremio-art/raw/main/'
+const artRemote = 'https://raw.githubusercontent.com/Stremio/stremio-art/main/'
 
 const galleryTemplate = fs.readFileSync('./html-templates/main.html').toString()
 
