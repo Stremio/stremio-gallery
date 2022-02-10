@@ -5,7 +5,9 @@ let print = ''
 
 try {
 	print = new Fingerprint().get()
-} catch(e) {}
+} catch(e) {
+	console.warn('Fingerprint module could not be loaded, bumping may not work properly')
+}
 
 const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
 
