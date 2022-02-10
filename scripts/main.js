@@ -9,7 +9,7 @@ try {
 	console.warn('Fingerprint module could not be loaded, bumping may not work properly')
 }
 
-const artLoc = 'https://raw.githubusercontent.com/Stremio/stremio-art/main/'
+const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
 
 function openModal(item) {
 	const name = item.replace(/\.[^/.]+$/, "").split('-').join(' ')
