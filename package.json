@@ -1,0 +1,12 @@
+{
+  "name": "stremio-gallery",
+  "version": "0.0.1",
+  "description": "Community Art Gallery for Stremio",
+  "private": false,
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "stremio-art": "Stremio/stremio-art#main"
+  }
+}

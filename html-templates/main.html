@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" type="image/png" sizes="32x32" href="https://www.stremio.com/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="https://www.stremio.com/favicon-96x96.png">
+		<title>Stremio Art Gallery</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">
+		<script src="scripts/isotope.min.js"></script>
+		<script src="scripts/micromodal.min.js"></script>
+		<script src="scripts/jquery-3.6.0.min.js"></script>
+		<link rel="stylesheet" href="styles/main.css">
+		<link rel="stylesheet" href="styles/modal.css">
+		<link rel="stylesheet" href="styles/font-awesome-6.0.0.min.css"/>
+		<script src="scripts/fingerprint.min.js"></script>
+	</head>
+	<body>
+		<center>
+			<a href="https://stremio.com" target="_blank">
+				<img src="https://www.stremio.com/website/stremio-logo-small.png" id="logo">
+			</a>
+			<div style="height: 10px"></div>
+			<h1 style="opacity: 0.75">Stremio Art Gallery</h1>
+			<span>Imagined by the Stremio Community</span>
+			<div style="height: 25px"></div>
+			<div class="grid">
+				{art-catalog}
+			</div>
+
+			<div style="height: 50px"></div>
+
+			  <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+			    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+			      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+			        <header class="modal__header">
+			          <h2 class="modal__title" id="modal-1-title">
+			            Item Name
+			          </h2>
+			          <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+			        </header>
+			        <main class="modal__content" id="modal-1-content">
+			          <a href="#" target="_blank"><img src=""></a>
+			        </main>
+			        <footer class="modal__footer">
+			        	<center>
+							<a href="#" data-item="{item-name}" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="{item-name}" class="like-button"><i class="fa-solid fa-heart user-buttons"></i></a>
+							<span class="counter">0</span>
+						</center>
+			        </footer>
+			      </div>
+			    </div>
+			  </div>
+		</center>
+		<script src="scripts/main.js"></script>
+	</body>
+</html>
