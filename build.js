@@ -1,10 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 
-const artLoc = './node_modules/stremio-art/'
+const artLocal = './node_modules/stremio-art/'
 
-const allImages = fs.readdirSync(path.join(artLoc, 'originals'))
-const allThumbnails = fs.readdirSync(path.join(artLoc, 'thumbnails'))
+const allImages = fs.readdirSync(path.join(artLocal, 'originals'))
+const allThumbnails = fs.readdirSync(path.join(artLocal, 'thumbnails'))
+
+const artRemote = 'https://github.com/Stremio/stremio-art/raw/main/'
 
 const galleryTemplate = fs.readFileSync('./html-templates/main.html').toString()
 
@@ -18,12 +20,12 @@ const allItems = allImages.map(item => {
 	if (['jpg','gif','png'].includes(extension)) {
 		return imageTemplate
 				.split('{item-name}').join(item)
-				.replace('{image-url}', path.join(artLoc, hasThumb ? 'thumbnails' : 'originals') + '/' + item)
+				.replace('{image-url}', path.join(artRemote, hasThumb ? 'thumbnails' : 'originals') + '/' + item)
 				.replace('{image-name}', name)
 	} else if (['mp4'].includes(extension)) {
 		return videoTemplate
 				.split('{item-name}').join(item)
-				.replace('{video-url}', path.join(artLoc, 'originals') + '/' + item)
+				.replace('{video-url}', path.join(artRemote, 'originals') + '/' + item)
 				.replace('{video-name}', name)
 	} else {
 		return false
