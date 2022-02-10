@@ -20,12 +20,12 @@ const allItems = allImages.map(item => {
 	if (['jpg','gif','png'].includes(extension)) {
 		return imageTemplate
 				.split('{item-name}').join(item)
-				.replace('{image-url}', path.join(artRemote, hasThumb ? 'thumbnails' : 'originals') + '/' + item)
+				.replace('{image-url}', artRemote + (hasThumb ? 'thumbnails' : 'originals') + '/' + encodeURIComponent(item))
 				.replace('{image-name}', name)
 	} else if (['mp4'].includes(extension)) {
 		return videoTemplate
 				.split('{item-name}').join(item)
-				.replace('{video-url}', path.join(artRemote, 'originals') + '/' + item)
+				.replace('{video-url}', artRemote + 'originals' + '/' + encodeURIComponent(item))
 				.replace('{video-name}', name)
 	} else {
 		return false
