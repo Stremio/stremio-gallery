@@ -1,7 +1,11 @@
 
 MicroModal.init()
 
-const print = new Fingerprint().get()
+let print = ''
+
+try {
+	print = new Fingerprint().get()
+} catch(e) {}
 
 const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
 
