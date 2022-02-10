@@ -14,8 +14,8 @@ const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
 function openModal(item) {
 	const name = item.replace(/\.[^/.]+$/, "").split('-').join(' ')
 	$('.modal__title').text(name)
-	$('.modal__content a').attr('href', artLoc + 'originals/'+item)
-	$('.modal__content a img').attr('src', artLoc + 'originals/'+item)
+	$('.modal__content a').attr('href', artLoc + 'originals/'+encodeURIComponent(item))
+	$('.modal__content a img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
 	$('.modal__footer .share-button').attr('data-item', item)
 	$('.modal__footer .like-button').attr('data-item', item)
 	// give a bit of time so we don't see the image flicker when we change it
