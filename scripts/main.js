@@ -3,7 +3,7 @@ MicroModal.init()
 
 const print = new Fingerprint().get()
 
-const artLoc = 'node_modules/stremio-art/'
+const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
 
 function openModal(item) {
 	const name = item.replace(/\.[^/.]+$/, "").split('-').join(' ')
@@ -29,6 +29,27 @@ function copyLink(link) {
 	window.prompt("Copy Addon URL Clipboard: Ctrl+C, Enter", link)
 }
 
+function loadIsotope() {
+	window.iso = new Isotope('.grid', {
+		  itemSelector: '.grid-item',
+		  getSortData: {
+		    bumps: '.counter'
+		  },
+		  layoutMode: 'masonry',
+		  fitWidth: true
+	});
+	window.iso.arrange({ sortBy: 'bumps', sortAscending: false });
+}
+
+let imagesLoaded = false
+let bumpsLoaded = false
+
+$(window).on('load', function() {
+	imagesLoaded = true
+	if (bumpsLoaded)
+		loadIsotope()
+})
+
 $(document).ready(function() {
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
@@ -47,15 +68,9 @@ $(document).ready(function() {
 		  		}
 		  	})
 	  	setTimeout(() => {
-			window.iso = new Isotope('.grid', {
-				  itemSelector: '.grid-item',
-				  getSortData: {
-				    likes: '.counter'
-				  },
-				  layoutMode: 'masonry',
-				  fitWidth: true
-			});
-			window.iso.arrange({ sortBy: 'likes', sortAscending: false });
+	  		bumpsLoaded = true
+	  		if (imagesLoaded)
+	  			loadIsotope()
 	  	})
 	  })
 
