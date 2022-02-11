@@ -40,12 +40,12 @@ function initBuild(allThumbnails, allImages) {
 needle.get('https://api.github.com/repos/'+artRepo+'/contents/thumbnails', (err, resp, body) => {
 	if (((body || [])[0] || {}).name) {
 		const allThumbnails = body.map(el => el.name).filter(el => !!el)
-		needle.get('https://api.github.com/repos/'+artRepo+'/contents/thumbnails', (err, resp, body) => {
+		needle.get('https://api.github.com/repos/'+artRepo+'/contents/originals', (err, resp, body) => {
 			if (((body || [])[0] || {}).name) {
 				const allImages = body.map(el => el.name).filter(el => !!el)
 				initBuild(allThumbnails, allImages)
 			} else {
-				console.log('Could not retrieve thumbnails from stremio-art')
+				console.log('Could not retrieve originals from stremio-art')
 				process.exit(0)
 			}
 		})
