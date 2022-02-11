@@ -19,14 +19,14 @@
   padding: 30px;
   max-width: 100%;
   max-height: 100vh;
-  border-radius: 4px;
+  border-radius: 0;
   overflow-y: auto;
   box-sizing: border-box;
 }
 
 .modal__container img {
-	max-height: 70vh;
-	max-width: 70vw;
+  max-height: calc(100vh - 177px);
+  max-width: calc(100vw - 60px);
 }
 
 .modal__header {

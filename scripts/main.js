@@ -12,17 +12,21 @@ try {
 
 const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
 
+const blankPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+
 function openModal(item) {
 	const name = item.replace(/\.[^/.]+$/, "").split('-').join(' ')
-	$('.modal__title').text(name)
-	$('.modal__content a').attr('href', artLoc + 'originals/'+encodeURIComponent(item))
-	$('.modal__content a img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
-	$('.modal__footer .share-button').attr('data-item', item)
-	$('.modal__footer .like-button').attr('data-item', item)
-	// give a bit of time so we don't see the image flicker when we change it
+	// set to blank png first to avoid image flicker
+	$('.modal__content a img').attr('src', blankPng)
 	setTimeout(() => {
+		$('.modal__title').text(name)
+		$('.modal__content a').attr('href', artLoc + 'originals/'+encodeURIComponent(item))
+		$('.modal__content a img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
+		$('.modal__footer .share-button').attr('data-item', item)
+		$('.modal__footer .like-button').attr('data-item', item)
+		// give a bit of time so we don't see the image flicker when we change it
 		MicroModal.show('modal-1')
-	}, 200)
+	})
 }
 
 const urlParams = new URLSearchParams(window.location.search)
