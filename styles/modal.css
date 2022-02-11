@@ -16,7 +16,7 @@
 
 .modal__container {
   background-color: #fff;
-  padding: 30px;
+  padding: 20px;
   max-width: 100%;
   max-height: 100vh;
   border-radius: 0;
@@ -25,8 +25,8 @@
 }
 
 .modal__container img {
-  max-height: calc(100vh - 177px);
-  max-width: calc(100vw - 60px);
+  max-height: calc(100vh - 133px);
+  max-width: calc(100vw - 40px);
 }
 
 .modal__header {
@@ -55,8 +55,8 @@
 .modal__header .modal__close:before { content: "\2715"; }
 
 .modal__content {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
   line-height: 1.5;
   color: rgba(0,0,0,.8);
 }
