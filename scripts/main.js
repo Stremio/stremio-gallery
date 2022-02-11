@@ -40,7 +40,10 @@ if (shareParam)
 	openModal(shareParam)
 
 function copyLink(link) {
-	window.prompt("Copy Addon URL Clipboard: Ctrl+C, Enter", link)
+	let copyLinkMsg = 'Copy Share Link to Clipboard: Ctrl+C, Enter'
+	if (window.isMobile)
+		copyLinkMsg = 'Copy Share Link to Clipboard: Long Press Text, Copy'
+	window.prompt(copyLinkMsg, link)
 }
 
 function loadIsotope() {

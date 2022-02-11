@@ -97,10 +97,6 @@ a:visited {
 	right: 15px;
 }
 
-.go-to-website {
-	font-weight: bold;
-}
-
 @media only screen and (max-width: 1000px) {
   .grid-item {
   	width: calc(50% - 32px) !important;
