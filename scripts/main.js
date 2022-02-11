@@ -47,7 +47,7 @@ function loadIsotope() {
 	window.iso = new Isotope('.grid', {
 		  itemSelector: '.grid-item',
 		  getSortData: {
-		    bumps: '.counter',
+		    bumps: itemElem => parseInt($(itemElem).find('.counter').text()),
 		    alpha: '.item-title',
 		  },
 		  layoutMode: 'masonry',
