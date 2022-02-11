@@ -36,9 +36,6 @@ const urlParams = new URLSearchParams(window.location.search)
 
 const shareParam = urlParams.get('share')
 
-if (shareParam)
-	openModal(shareParam)
-
 function copyLink(link) {
 	let copyLinkMsg = 'Copy Share Link to Clipboard: Ctrl+C, Enter'
 	if (window.isMobile)
@@ -60,6 +57,8 @@ function loadIsotope() {
 	setTimeout(() => {
 		$('.gallery-loader').remove()
 		$('.grid').animate({ opacity: 1 }, 500)
+		if (shareParam)
+			openModal(shareParam)
 	})
 }
 
