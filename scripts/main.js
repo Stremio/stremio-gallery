@@ -56,6 +56,20 @@ function loadIsotope() {
 	window.iso.arrange({ sortBy: 'bumps', sortAscending: false })
 }
 
+function toggleLiked(elem) {
+	if ($(elem).find('.user-buttons').hasClass('liked')) {
+		const counter = $(elem).parent().find('.counter')
+		const count = parseInt(counter.text()) -1
+		counter.text(count)
+		$(elem).find('.user-buttons').removeClass('liked')
+	} else {
+		const counter = $(elem).parent().find('.counter')
+		const count = parseInt(counter.text()) +1
+		counter.text(count)
+		$(elem).find('.user-buttons').addClass('liked')
+	}
+}
+
 let imagesLoaded = false
 let bumpsLoaded = false
 
@@ -104,16 +118,23 @@ $(document).ready(function() {
 		copyLink(shareLink)
 		return false
 	})
+
 	$('.like-button').click(function(ev) {
 		ev.preventDefault()
+
 		const item = $(this).attr('data-item')
+
+		if ($(this).hasClass('is-modal')) {
+			// toggle main item too
+  			const elem = $(".grid-item[data-item='"+item+"']")
+  			if (elem.length) toggleLiked(elem.find('.like-button')[0])
+		}
+
 		if ($(this).find('.user-buttons').hasClass('liked')) {
 			if (localStorage && localStorage.getItem(item))
 				localStorage.removeItem(item)
-			const counter = $(this).parent().find('.counter')
-			const count = parseInt(counter.text()) -1
-			counter.text(count)
-			$(this).find('.user-buttons').removeClass('liked')
+
+			toggleLiked(this)
 
 			fetch('https://bumper.stremio.workers.dev/revert?code='+encodeURIComponent(item)+'&uid='+encodeURIComponent(print + '+' + item))
 			  .then(response => response.json())
@@ -127,10 +148,8 @@ $(document).ready(function() {
 					return false
 				localStorage.setItem(item, '1')
 			}
-			const counter = $(this).parent().find('.counter')
-			const count = parseInt(counter.text()) +1
-			counter.text(count)
-			$(this).find('.user-buttons').addClass('liked')
+
+			toggleLiked(this)
 
 			fetch('https://bumper.stremio.workers.dev/bump?code='+encodeURIComponent(item)+'&uid='+encodeURIComponent(print + '+' + item))
 			  .then(response => response.json())
