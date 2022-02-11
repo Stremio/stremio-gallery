@@ -56,7 +56,8 @@ a:visited {
 	margin-top: 15px;
 }
 .grid {
-	width: 100%
+	width: 100%;
+	opacity: 0;
 }
 .grid-item {
 	width: calc(33.3333% - 32px) !important;

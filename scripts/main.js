@@ -57,6 +57,10 @@ function loadIsotope() {
 		  fitWidth: true
 	})
 	window.iso.arrange({ sortBy: 'bumps', sortAscending: false })
+	setTimeout(() => {
+		$('.gallery-loader').remove()
+		$('.grid').animate({ opacity: 1 }, 500)
+	})
 }
 
 function toggleLiked(elem) {
