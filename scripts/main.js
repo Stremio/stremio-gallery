@@ -6,6 +6,7 @@ let print = ''
 try {
 	print = new Fingerprint().get()
 } catch(e) {
+	print = Date.now() + ''
 	console.warn('Fingerprint module could not be loaded, bumping may not work properly')
 }
 
