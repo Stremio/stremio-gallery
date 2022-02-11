@@ -24,6 +24,9 @@ function openModal(item) {
 		$('.modal__content a img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
 		$('.modal__footer .share-button').attr('data-item', item)
 		$('.modal__footer .like-button').attr('data-item', item)
+		$('.modal__footer .counter').text((allBumps[item] || 0)+'')
+		const isLiked = !!(localStorage && localStorage.getItem(item))
+		$('.modal__footer .like-button .user-buttons')[(isLiked ? 'add' : 'remove') + 'Class']('liked')
 		// give a bit of time so we don't see the image flicker when we change it
 		MicroModal.show('modal-1')
 	})
@@ -61,11 +64,14 @@ $(window).on('load', function() {
 		loadIsotope()
 })
 
+let allBumps = {}
+
 $(document).ready(function() {
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
 	  .then(data => {
-	  	if (typeof data === 'object')
+	  	if (typeof data === 'object') {
+	  		allBumps = data
 		  	Object.keys(data || {}).forEach(key => {
 		  		if (data[key]) {
 		  			const elem = $(".grid-item[data-item='"+key+"']")
@@ -78,6 +84,7 @@ $(document).ready(function() {
 		  			}
 		  		}
 		  	})
+		  }
 	  	setTimeout(() => {
 	  		bumpsLoaded = true
 	  		if (imagesLoaded)
