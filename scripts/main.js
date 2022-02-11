@@ -42,7 +42,7 @@ if (shareParam)
 function copyLink(link) {
 	let copyLinkMsg = 'Copy Share Link to Clipboard: Ctrl+C, Enter'
 	if (window.isMobile)
-		copyLinkMsg = 'Copy Share Link to Clipboard: Long Press Text, Copy'
+		copyLinkMsg = 'Copy Share Link to Clipboard: Long Press Text, Select Copy'
 	window.prompt(copyLinkMsg, link)
 }
 
