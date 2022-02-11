@@ -1,5 +1,8 @@
+<!DOCTYPE html>
 <html>
 	<head>
+		<meta name="description" content="Stremio gallery of digital art submitted by the community, fanart from Stremio users.">
+		<meta name="keywords" content="Stremio, art, fanart, gallery, digital art, drawings">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" type="image/png" sizes="32x32" href="https://www.stremio.com/favicon-32x32.png">
 		<link rel="icon" type="image/png" sizes="96x96" href="https://www.stremio.com/favicon-96x96.png">
@@ -17,6 +20,11 @@
 	</head>
 	<body>
 		<center>
+			<div class="submit-art-button-holder">
+				<a href="https://github.com/stremio/stremio-art#readme" target="_blank">
+					<div class="standard-buttons submit-art-button">Submit Art</div>
+				</a>
+			</div>
 			<a href="https://stremio.com" target="_blank">
 				<img src="https://www.stremio.com/website/stremio-logo-small.png" id="logo">
 			</a>
@@ -24,10 +32,19 @@
 			<h1 style="opacity: 0.75">Stremio Art Gallery</h1>
 			<span>Imagined by the Stremio Community</span>
 			<div style="height: 25px"></div>
+			<div class="standard-buttons mod-buttons">By Likes</div>
+			<div class="standard-buttons mod-buttons">Alphabetically</div>
+			<div class="standard-buttons mod-buttons">Shuffle</div>
+			<br/>
+			<div class="standard-buttons mod-buttons">All</div>
+			<div class="standard-buttons mod-buttons">My Likes</div>
+			<div style="height: 15px"></div>
 			<div class="grid">
 				{art-catalog}
 			</div>
 
+			<div style="height: 35px"></div>
+			<div class="standard-buttons go-to-top">Go to Top</div><a href="https://stremio.com" target="_blank"><div class="standard-buttons go-to-website">Stremio Website</div></a>
 			<div style="height: 50px"></div>
 
 			  <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
@@ -44,7 +61,7 @@
 			        </main>
 			        <footer class="modal__footer">
 			        	<center>
-							<a href="#" data-item="{item-name}" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="{item-name}" class="like-button"><i class="fa-solid fa-heart user-buttons"></i></a>
+							<a href="#" data-item="{item-name}" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="{item-name}" class="like-button is-modal"><i class="fa-solid fa-heart user-buttons"></i></a>
 							<span class="counter">0</span>
 						</center>
 			        </footer>
