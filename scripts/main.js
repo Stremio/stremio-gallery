@@ -192,7 +192,7 @@ $(document).ready(function() {
 			setTimeout(() => {
 				window.iso.needsResizeLayout()
 			})
-		} else if (filter == 'All') {
+		} else if (filter == 'Show All') {
 			window.iso.arrange({
 			  filter: '*'
 			})
