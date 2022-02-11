@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="styles/main.css">
 		<link rel="stylesheet" href="styles/modal.css">
 		<link rel="stylesheet" href="styles/font-awesome-6.0.0.min.css"/>
+		<link rel="stylesheet" href="styles/gallery-loader.css"/>
 		<script src="scripts/print.min.js"></script>
 	</head>
 	<body>
@@ -40,6 +41,14 @@
 			<div class="standard-buttons mod-buttons">All</div>
 			<div class="standard-buttons mod-buttons">My Likes</div>
 			<div style="height: 15px"></div>
+			<div class="gallery-loader loader-wrapper">
+				<div class="sk-folding-cube">
+				  <div class="sk-cube1 sk-cube"></div>
+				  <div class="sk-cube2 sk-cube"></div>
+				  <div class="sk-cube4 sk-cube"></div>
+				  <div class="sk-cube3 sk-cube"></div>
+				</div>
+			</div>
 			<div class="grid">
 				<div class="grid-item" data-item="Ahlen Ken A. Batalon.png">
 	<a href="#" data-item="Ahlen Ken A. Batalon.png" target="_blank" class="open-modal"><img src="https://github.com/Stremio/stremio-art/raw/main/thumbnails/Ahlen%20Ken%20A.%20Batalon.png"></a>
@@ -217,14 +226,11 @@
 			<span class="item-title">Chris T</span>
 		</div>
 	</div>
-</div><div class="grid-item" data-item="DanielaSchutz.mp4">
-	<video controls>
-	  <source src="https://github.com/Stremio/stremio-art/raw/main/originals/DanielaSchutz.mp4" type="video/mp4">
-	Your browser does not support the video tag.
-	</video>
+</div><div class="grid-item" data-item="DanielaSchutz.png">
+	<a href="#" data-item="DanielaSchutz.png" target="_blank" class="open-modal"><img src="https://github.com/Stremio/stremio-art/raw/main/thumbnails/DanielaSchutz.png"></a>
 	<div class="item-footer">
 		<div style="float: left">
-			<a href="#" data-item="DanielaSchutz.mp4" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="DanielaSchutz.mp4" class="like-button"><i class="fa-solid fa-heart user-buttons"></i></a>
+			<a href="#" data-item="DanielaSchutz.png" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="DanielaSchutz.png" class="like-button"><i class="fa-solid fa-heart user-buttons"></i></a>
 			<span class="counter">0</span>
 		</div>
 		<div style="float: right">
@@ -996,7 +1002,17 @@
 			          <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
 			        </header>
 			        <main class="modal__content" id="modal-1-content">
-			          <a href="#" target="_blank"><img src=""></a>
+			          <a href="#" target="_blank" class="preview-image-holder">
+						<div class="preview-loader">
+							<div class="sk-folding-cube">
+							  <div class="sk-cube1 sk-cube"></div>
+							  <div class="sk-cube2 sk-cube"></div>
+							  <div class="sk-cube4 sk-cube"></div>
+							  <div class="sk-cube3 sk-cube"></div>
+							</div>
+						</div>
+			          	<img src="">
+			          </a>
 			        </main>
 			        <footer class="modal__footer">
 			        	<center>
