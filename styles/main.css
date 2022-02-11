@@ -73,16 +73,32 @@ a:visited {
 	width: 100%
 }
 
-.mod-buttons {
+.standard-buttons {
 	padding: 10px;
 	margin:  7px;
 	border: 1px solid rgba(0,0,0,0.2);
 	display: inline-block;
 	cursor: pointer;
+	test-decoration: none;
+	color: black;
 }
 
-.mod-buttons:hover {
+.standard-buttons:hover {
 	background-color: rgba(0,0,0,0.1);
+}
+
+.submit-art-button {
+	font-weight: bold;
+}
+
+.submit-art-button-holder {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+}
+
+.go-to-website {
+	font-weight: bold;
 }
 
 @media only screen and (max-width: 1000px) {

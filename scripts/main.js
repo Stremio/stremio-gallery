@@ -192,4 +192,9 @@ $(document).ready(function() {
 		}
 		return false
 	})
+	$('.go-to-top').click(function(ev) {
+		ev.preventDefault()
+		$('html, body').animate({ scrollTop: 0 }, 'slow')
+		return false
+	})
 })
