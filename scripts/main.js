@@ -47,12 +47,13 @@ function loadIsotope() {
 	window.iso = new Isotope('.grid', {
 		  itemSelector: '.grid-item',
 		  getSortData: {
-		    bumps: '.counter'
+		    bumps: '.counter',
+		    alpha: '.item-title',
 		  },
 		  layoutMode: 'masonry',
 		  fitWidth: true
-	});
-	window.iso.arrange({ sortBy: 'bumps', sortAscending: false });
+	})
+	window.iso.arrange({ sortBy: 'bumps', sortAscending: false })
 }
 
 let imagesLoaded = false
@@ -144,6 +145,32 @@ $(document).ready(function() {
 		ev.preventDefault()
 		const item = $(this).attr('data-item')
 		openModal(item)
+		return false
+	})
+	$('.mod-buttons').click(function(ev) {
+		ev.preventDefault()
+		window.iso.updateSortData()
+		const filter = $(this).text()
+		if (filter == 'By Likes') {
+			window.iso.arrange({ sortBy: 'bumps', sortAscending: false })
+		} else if (filter == 'Alphabetically') {
+			window.iso.arrange({ sortBy: 'alpha', sortAscending: true })
+		} else if (filter == 'Shuffle') {
+			window.iso.shuffle()
+		} else if (filter == 'My Likes') {
+			window.iso.arrange({
+			  filter: function(itemElem) {
+			    return $(itemElem).find('.like-button .user-buttons').hasClass('liked')
+			  }
+			})
+			setTimeout(() => {
+				window.iso.needsResizeLayout()
+			})
+		} else if (filter == 'All') {
+			window.iso.arrange({
+			  filter: '*'
+			})
+		}
 		return false
 	})
 })
