@@ -44,6 +44,7 @@ function copyLink(link) {
 }
 
 function loadIsotope() {
+	isotopeLoaded = true
 	window.iso = new Isotope('.grid', {
 		  itemSelector: '.grid-item',
 		  getSortData: {
@@ -78,6 +79,7 @@ function toggleLiked(elem) {
 
 let imagesLoaded = false
 let bumpsLoaded = false
+let isotopeLoaded = false
 
 $(window).on('load', function() {
 	imagesLoaded = true
@@ -174,6 +176,8 @@ $(document).ready(function() {
 	})
 	$('.mod-buttons').click(function(ev) {
 		ev.preventDefault()
+		if (!isotopeLoaded)
+			return false
 		window.iso.updateSortData()
 		const filter = $(this).text()
 		if (filter == 'By Likes') {
