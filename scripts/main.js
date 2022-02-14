@@ -245,5 +245,13 @@ $(document).ready(function() {
 			switchItem(ev, -1)
 		else if (ev.which == 32 && $('.micromodal-slide').hasClass('is-open'))
 			$('.like-button.is-modal').click()
-	});
+	})
+
+	$(document).bind('swipeleft', ev => {
+		switchItem(ev, -1)
+	})
+
+	$(document).bind('swiperight',ev => {
+		switchItem(ev, 1)
+	})
 })
