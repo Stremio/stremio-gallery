@@ -247,11 +247,11 @@ $(document).ready(function() {
 			$('.like-button.is-modal').click()
 	})
 
-	$(document).bind('swipeleft', ev => {
-		switchItem(ev, -1)
+	$(document).on('swipeleft', ev => {
+		switchItem(ev, 1)
 	})
 
-	$(document).bind('swiperight',ev => {
-		switchItem(ev, 1)
+	$(document).on('swiperight',ev => {
+		switchItem(ev, -1)
 	})
 })
