@@ -24,6 +24,8 @@ function openModal(item) {
 		$('.modal__content a img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
 		$('.modal__footer .share-button').attr('data-item', item)
 		$('.modal__footer .like-button').attr('data-item', item)
+		$('.modal__footer .modal-prev-button').attr('data-item', item)
+		$('.modal__footer .modal-next-button').attr('data-item', item)
 		$('.modal__footer .counter').text((allBumps[item] || 0)+'')
 		const isLiked = !!(localStorage && localStorage.getItem(item))
 		$('.modal__footer .like-button .user-buttons')[(isLiked ? 'add' : 'remove') + 'Class']('liked')
@@ -205,6 +207,40 @@ $(document).ready(function() {
 	$('.go-to-top').click(function(ev) {
 		ev.preventDefault()
 		$('html, body').animate({ scrollTop: 0 }, 'slow')
+		return false
+	})
+	$('.modal-next-button').click(function(ev) {
+		ev.preventDefault()
+		const key = $('.modal-next-button').attr('data-item')
+		let nextItem
+		window.iso.filteredItems.some((el,ij) => {
+			if ($(el.element).attr('data-item') == key) {
+				if (window.iso.filteredItems[ij+1])
+					nextItem = window.iso.filteredItems[ij+1].element
+				return true
+			}
+		})
+		if (nextItem) {
+			const newKey = $(nextItem).attr('data-item')
+			openModal(newKey)
+		}
+		return false
+	})
+	$('.modal-prev-button').click(function(ev) {
+		ev.preventDefault()
+		const key = $('.modal-next-button').attr('data-item')
+		let prevItem
+		window.iso.filteredItems.some((el,ij) => {
+			if ($(el.element).attr('data-item') == key) {
+				if (window.iso.filteredItems[ij-1])
+					prevItem = window.iso.filteredItems[ij-1].element
+				return true
+			}
+		})
+		if (prevItem) {
+			const newKey = $(prevItem).attr('data-item')
+			openModal(newKey)
+		}
 		return false
 	})
 })
