@@ -69,7 +69,7 @@
 			          <h2 class="modal__title" id="modal-1-title">
 			            Item Name
 			          </h2>
-			          <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+			          <div class="standard-buttons modal__close" aria-label="Close modal" data-micromodal-close><i class="fa-solid fa-house-chimney user-buttons"></i>Stremio Gallery</div>
 			        </header>
 			        <main class="modal__content" id="modal-1-content">
 			          <a href="#" target="_blank" class="preview-image-holder">
@@ -83,8 +83,15 @@
 						</div>
 			          	<img src="">
 			          </a>
+			          <div class="preview-video-holder">
+						  <video controls>
+						    <source id="video-source" src="" type="video/mp4">
+						  </video>
+					  </div>
 			        </main>
 			        <footer class="modal__footer">
+						<div data-item="{item-name}" class="standard-buttons modal-prev-button" style="left: 20px">←&nbsp;&nbsp;Prev</div>
+						<div data-item="{item-name}" class="standard-buttons modal-next-button" style="right: 20px">Next&nbsp;&nbsp;→</div>
 			        	<center>
 							<a href="#" data-item="{item-name}" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="{item-name}" class="like-button is-modal"><i class="fa-solid fa-heart user-buttons"></i></a>
 							<span class="counter">0</span>
