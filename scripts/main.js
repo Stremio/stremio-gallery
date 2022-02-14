@@ -129,12 +129,10 @@ $(document).ready(function() {
 
 	$('.share-button').click(function(ev) {
 		ev.preventDefault()
-		let currentUrl = window.location.href
-		if (currentUrl.includes('?'))
-			currentUrl = currentUrl.split('?')[0]
-		if (currentUrl.includes('#'))
-			currentUrl = currentUrl.split('#')[0]
-		const shareLink = currentUrl + '?share=' + encodeURIComponent($(this).attr('data-item'))
+		const item = $(this).attr('data-item')
+	  	const ext = item.split('.').pop()
+	  	const htmlPage = encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
+		const shareLink = 'https://art.stremio.com/items/' + htmlPage
 		copyLink(shareLink)
 		return false
 	})
