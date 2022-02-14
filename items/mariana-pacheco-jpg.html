@@ -11,13 +11,13 @@
 	<meta property="og:image" content="https://github.com/Stremio/stremio-art/raw/main/thumbnails/mariana-pacheco.jpg">
 	<link rel="icon" type="image/png" sizes="32x32" href="https://www.stremio.com/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="https://www.stremio.com/favicon-96x96.png">
-	<title>Stremio Art Gallery</title>
+	<title>mariana pacheco - Stremio Art Gallery</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">
 	<script src="../scripts/micromodal.min.js"></script>
 	<script src="../scripts/jquery-3.6.0.min.js"></script>
-	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../scripts/jquery.mobile-1.5.0-rc1.min.js"></script>
 	<script src="../scripts/isMobile.js"></script>
 	<link rel="stylesheet" href="../styles/main.css">
 	<link rel="stylesheet" href="../styles/modal.css">
@@ -261,12 +261,12 @@ $(document).ready(function() {
 			$('.like-button.is-modal').click()
 	})
 
-	$(document).bind('swipeleft', ev => {
-		switchItem(ev, -1)
+	$(document).on('swipeleft', ev => {
+		switchItem(ev, 1)
 	})
 
-	$(document).bind('swiperight',ev => {
-		switchItem(ev, 1)
+	$(document).on('swiperight',ev => {
+		switchItem(ev, -1)
 	})
 
 })
