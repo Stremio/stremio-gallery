@@ -20,8 +20,18 @@ function openModal(item) {
 	$('.modal__content a img').attr('src', blankPng)
 	setTimeout(() => {
 		$('.modal__title').text(name)
-		$('.modal__content a').attr('href', artLoc + 'originals/'+encodeURIComponent(item))
-		$('.modal__content a img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
+		if (item.toLowerCase().endsWith('.mp4')) {
+			$('#video-source').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
+			$('.preview-video-holder').show()
+			$('.modal__content .preview-image-holder').hide()
+			$('.modal__content video')[0].load()
+			setTimeout(() => { $('.modal__content video')[0].play() })
+		} else {
+			$('.modal__content .preview-image-holder').attr('href', artLoc + 'originals/'+encodeURIComponent(item))
+			$('.modal__content .preview-image-holder img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
+			$('.modal__content .preview-image-holder').show()
+			$('.preview-video-holder').hide()
+		}
 		$('.modal__footer .share-button').attr('data-item', item)
 		$('.modal__footer .like-button').attr('data-item', item)
 		$('.modal__footer .modal-prev-button').attr('data-item', item)
@@ -209,38 +219,33 @@ $(document).ready(function() {
 		$('html, body').animate({ scrollTop: 0 }, 'slow')
 		return false
 	})
-	$('.modal-next-button').click(function(ev) {
+	function switchItem(ev, direction) {
 		ev.preventDefault()
-		const key = $('.modal-next-button').attr('data-item')
-		let nextItem
+		if (!$('.micromodal-slide').hasClass('is-open'))
+			return false
+		const key = $('.modal-' + (direction > 0 ? 'next' : 'prev') + '-button').attr('data-item')
+		let newItem
 		window.iso.filteredItems.some((el,ij) => {
 			if ($(el.element).attr('data-item') == key) {
-				if (window.iso.filteredItems[ij+1])
-					nextItem = window.iso.filteredItems[ij+1].element
+				if (window.iso.filteredItems[ij+direction])
+					newItem = window.iso.filteredItems[ij+direction].element
 				return true
 			}
 		})
-		if (nextItem) {
-			const newKey = $(nextItem).attr('data-item')
+		if (newItem) {
+			const newKey = $(newItem).attr('data-item')
 			openModal(newKey)
 		}
 		return false
-	})
-	$('.modal-prev-button').click(function(ev) {
-		ev.preventDefault()
-		const key = $('.modal-next-button').attr('data-item')
-		let prevItem
-		window.iso.filteredItems.some((el,ij) => {
-			if ($(el.element).attr('data-item') == key) {
-				if (window.iso.filteredItems[ij-1])
-					prevItem = window.iso.filteredItems[ij-1].element
-				return true
-			}
-		})
-		if (prevItem) {
-			const newKey = $(prevItem).attr('data-item')
-			openModal(newKey)
-		}
-		return false
-	})
+	}
+	$('.modal-next-button').click(ev => { switchItem(ev, 1) })
+	$('.modal-prev-button').click(ev => { switchItem(ev, -1) })
+	$(document).keyup(function(ev) {
+		if (ev.which == 39)
+			switchItem(ev, 1)			
+		else if (ev.which == 37)
+			switchItem(ev, -1)
+		else if (ev.which == 32 && $('.micromodal-slide').hasClass('is-open'))
+			$('.like-button.is-modal').click()
+	});
 })

@@ -121,7 +121,21 @@ a:visited {
 	max-width: 100vw
 }
 
+.preview-video-holder {
+	height: 100%;
+  width: 100%;
+  position: relative;
+  background-color: rgba(0,0,0,0.1)
+}
 
+.preview-video-holder video {
+	z-index: 1000;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  max-height: 100%;
+  max-width: 100vw;
+}
 
 @media only screen and (max-width: 1000px) {
   .grid-item {
