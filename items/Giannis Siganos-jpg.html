@@ -1,0 +1,267 @@
+<html>
+<head>
+	<meta name="description" content="Stremio gallery of digital art submitted by the community, fanart from Stremio users.">
+	<meta name="keywords" content="Stremio, art, fanart, gallery, digital art, drawings">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Giannis Siganos - Stremio Art Gallery">
+	<meta property="og:description" content="Stremio gallery of digital art submitted by the community, fanart from Stremio users.">
+	<meta name="application-name" content="Giannis Siganos - Stremio Art Gallery">
+	<meta name="author" content="Stremio">
+	<meta property="og:image" content="https://github.com/Stremio/stremio-art/raw/main/thumbnails/Giannis%20Siganos.jpg">
+	<link rel="icon" type="image/png" sizes="32x32" href="https://www.stremio.com/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="https://www.stremio.com/favicon-96x96.png">
+	<title>Stremio Art Gallery</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">
+	<script src="../scripts/micromodal.min.js"></script>
+	<script src="../scripts/jquery-3.6.0.min.js"></script>
+	<script src="../scripts/isMobile.js"></script>
+	<link rel="stylesheet" href="../styles/main.css">
+	<link rel="stylesheet" href="../styles/modal.css">
+	<link rel="stylesheet" href="../styles/font-awesome-6.0.0.min.css"/>
+	<link rel="stylesheet" href="../styles/loader.css"/>
+	<script src="../scripts/print.min.js"></script>
+	<style>
+		.liked .fa-solid.user-buttons {
+			color:  red;
+			opacity:  1;
+		}
+	</style>
+</head>
+<body>
+	<center>
+  <div class="modal micromodal-slide is-open" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close style="animation: none">
+      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title" style="animation: none">
+        <header class="modal__header">
+          <h2 class="modal__title" id="modal-1-title">
+            Giannis Siganos
+          </h2>
+          <a href="https://art.stremio.com/" class="standard-buttons modal__close"><i class="fa-solid fa-house-chimney user-buttons"></i>Stremio Gallery</a>
+        </header>
+        <main class="modal__content" id="modal-1-content">
+          <a href="#" target="_blank" class="preview-image-holder" style="display: none">
+			<div class="preview-loader">
+				<div class="sk-folding-cube">
+				  <div class="sk-cube1 sk-cube"></div>
+				  <div class="sk-cube2 sk-cube"></div>
+				  <div class="sk-cube4 sk-cube"></div>
+				  <div class="sk-cube3 sk-cube"></div>
+				</div>
+			</div>
+          	<img src="https://github.com/Stremio/stremio-art/raw/main/originals/Giannis%20Siganos.jpg">
+          </a>
+          <div class="preview-video-holder" style="display: none">
+			  <video controls>
+			    <source src="https://github.com/Stremio/stremio-art/raw/main/originals/" type="video/mp4">
+			  </video>
+		  </div>
+        </main>
+        <footer class="modal__footer">
+			<a href="Erna%20Berndt-jpg.html"><div data-item="Giannis Siganos.jpg" class="standard-buttons modal-prev-button" style="left: 20px">←&nbsp;&nbsp;Prev</div></a>
+			<a href="Gladyz%20Pagaduan-jpg.html"><div data-item="Giannis Siganos.jpg" class="standard-buttons modal-next-button" style="right: 20px">Next&nbsp;&nbsp;→</div></a>
+        	<center>
+				<a href="#" data-item="Giannis Siganos.jpg" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="Giannis Siganos.jpg" class="like-button is-modal"><i class="fa-solid fa-heart user-buttons"></i></a>
+				<span class="counter">&nbsp;</span>
+			</center>
+        </footer>
+      </div>
+    </div>
+  </div>
+  	</center>
+  <script>
+
+const itemKey = 'Giannis Siganos.jpg'
+
+if (itemKey.toLowerCase().endsWith('.mp4')) {
+	document.getElementsByClassName('preview-video-holder')[0].style.display = 'block'
+	$('.modal__content video')[0].load()
+		setTimeout(() => { $('.modal__content video')[0].play() })
+
+} else {
+	document.getElementsByClassName('preview-image-holder')[0].style.display = 'block'
+}
+
+MicroModal.init()
+
+let print = ''
+
+try {
+	print = new Fingerprint().get()
+} catch(e) {
+	print = Date.now() + ''
+	console.warn('Fingerprint module could not be loaded, bumping may not work properly')
+}
+
+const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
+
+const blankPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+
+function copyLink(link) {
+	let copyLinkMsg = 'Copy Share Link to Clipboard: Ctrl+C, Enter'
+	if (window.isMobile)
+		copyLinkMsg = 'Copy Share Link to Clipboard: Long Press Text, Select Copy'
+	window.prompt(copyLinkMsg, link)
+}
+
+function toggleLiked(elem) {
+	if ($(elem).hasClass('liked')) {
+		const counter = $(elem).parent().find('.counter')
+		const count = parseInt(counter.text()) -1
+		counter.text(count)
+		$(elem).removeClass('liked')
+	} else {
+		const counter = $(elem).parent().find('.counter')
+		const count = parseInt(counter.text()) +1
+		counter.text(count)
+		$(elem).addClass('liked')
+	}
+}
+
+const allItems = JSON.parse('["Ahlen Ken A. Batalon.png","Ahmad-Bakur-1.jpg","Ahmad-Bakur-2.jpg","Ahmad-Bakur-3.jpg","Ahsan Ali.jpg","Albin George.png","Alejandra Garca1.jpg","Alejandra Garca2.jpg","Ana Maria Castro Sousa.png","Arlan da Silva Trindade.jpg","Arnaud Casier.jpg","Bahadır Parıldar.png","Bruna Beserra.jpg","Caio Miranda.jpg","Cerevcov Maxim.jpg","Chris T.jpg","DanielaSchutz.mp4","Deepankar Bishwash.jpg","Eduardo David Hernandex Gama.jpg","Eduardo David Hernandex Gama2.jpg","Edwin Andersson Quintero.png","Elen de Souza Silva.png","Emily Chanthavong-01.jpg","Emily Chanthavong-02.jpg","Emily Chanthavong-03.jpg","Emily Sharratt-Hicks.jpg","Erna Berndt.jpg","Gabriel Melo.jpg","Giannis Siganos.jpg","Gladyz Pagaduan.jpg","Guilherme Carvalho Fernandes.jpg","Guilherme Carvalho Fernandes.png","Guilherme Carvalho Fernandes2.jpg","Guilherme Carvalho Fernandes3.jpg","Gustavo Santos Silva.png","Hayet Ferahi.png","Husain Elhaq.jpg","Jacques Roux.jpg","Jairo Rodrigues dos Santos.jpg","Jelly Goat.png","Jennifer Kamara.jpg","Jesiel Rocha Lofhagen.png","Joao Felipe Krambeck Santos.jpg","Jon Nuo.png","Lao Yao.png","Lara Machado Fernandes.png","Laryssa_LoA_Martins_Pinto.jpg","Lena Le - Calling You Home.png","Lena Le - The Tokyo Diving.png","Leonardo-Hernandes.png","Lotify.jpg","Ma. Gladyz Pagaduan.jpg","Maka.jpg","Maniriho Joel.jpg","Mapwata Dikolela Othniel.jpg","Maria Sol Funes.png","Mariana Noemí Grumberg.png","Marko Kopic.jpg","Matheus Philip.png","Mayukh Banerjee.jpg","Mico Escorp.jpg","Miitee.png","Natalia Carolina Tulli.jpg","Naziknana.png","Pablo Lanz.jpg","Raphael Moreno.jpg","Rhona Sebastian.png","Samantha Dowling2.png","Sergio Borge.png","Shilpa k.png","Sofia Muniz Oliveira.jpg","Sofia Muniz Oliveira2.jpg","Solee Hikari.jpg","Subst.TR.jpg","Valentina Barraza.jpg","Zuupills.png","diego-cordero.jpg","mariana-pacheco.jpg","ramya kudugunti.jpg","reiphantomhive1.png","shino.png","tymmesyde.gif","vickybell.png"]')
+
+let listWithVotes = []
+
+let idx = -1
+
+function copyLink(link) {
+	let copyLinkMsg = 'Copy Share Link to Clipboard: Ctrl+C, Enter'
+	if (window.isMobile)
+		copyLinkMsg = 'Copy Share Link to Clipboard: Long Press Text, Select Copy'
+	window.prompt(copyLinkMsg, link)
+}
+
+$(document).ready(function() {
+	fetch('https://bumper.stremio.workers.dev/get')
+	  .then(response => response.json())
+	  .then(data => {
+	  	if (typeof data === 'object') {
+	  		allBumps = data
+	  		const hasRating = Object.keys(data || {}).some(key => {
+		  		if (data[key]) {
+		  			if (itemKey == key) {
+		  				$('.modal__container .counter').text(data[key]+'')
+			  			if (localStorage && localStorage.getItem(key)) {
+			  				// user liked this item too
+			  				$('.modal__container .like-button').addClass('liked')
+			  			}
+			  			return true
+			  		}
+		  		}
+		  	})
+
+		  	if (!hasRating)
+		  		$('.modal__container .counter').text('0')
+
+		  	allItems.forEach(key => {
+		  		listWithVotes.push({ item: key, bumps: data[key] || 0 })
+		  	})
+
+		  	listWithVotes.sort((a,b) => b.bumps - a.bumps)
+
+		  	listWithVotes.some((el, ij) => {
+		  		if (el.item == itemKey) {
+		  			idx = ij
+		  			return true
+		  		}
+		  	})
+
+		  	if (!listWithVotes[idx-1])
+		  		$('.modal-prev-button').hide()
+
+		  	if (!listWithVotes[idx+1])
+		  		$('.modal-next-button').hide()
+
+			$('.modal-next-button').parent().attr('href', '#')
+			$('.modal-prev-button').parent().attr('href', '#')
+
+		  	console.log(listWithVotes)
+
+		  }
+	  })
+
+	$('.like-button').click(function(ev) {
+		ev.preventDefault()
+
+		if (idx == -1)
+			return false
+
+		const item = $(this).attr('data-item')
+
+		if ($(this).hasClass('liked')) {
+			if (localStorage && localStorage.getItem(item))
+				localStorage.removeItem(item)
+
+			toggleLiked(this)
+
+			fetch('https://bumper.stremio.workers.dev/revert?code='+encodeURIComponent(item)+'&uid='+encodeURIComponent(print + '+' + item))
+			  .then(response => response.json())
+			  .then(data => {
+			  	if (!(data || {}).success)
+			  		console.warn('Revert bump for ' + item + ' not successful')
+			  })
+		} else {
+			if (localStorage) {
+				if (localStorage.getItem(item))
+					return false
+				localStorage.setItem(item, '1')
+			}
+
+			toggleLiked(this)
+
+			fetch('https://bumper.stremio.workers.dev/bump?code='+encodeURIComponent(item)+'&uid='+encodeURIComponent(print + '+' + item))
+			  .then(response => response.json())
+			  .then(data => {
+			  	if (!(data || {}).success)
+			  		console.warn('Bump for ' + item + ' not successful')
+			  })
+		}
+		return false
+	})
+
+	$('.share-button').click(function(ev) {
+		ev.preventDefault()
+		const item = $(this).attr('data-item')
+	  	const ext = item.split('.').pop()
+	  	const htmlPage = encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
+		const shareLink = 'https://art.stremio.com/items/' + htmlPage
+		copyLink(shareLink)
+		return false
+	})
+
+	  function switchItem(ev, direction) {
+	  	ev.preventDefault()
+	  	if (idx == -1)
+	  		return false
+	  	const newItem = listWithVotes[idx+direction]
+	  	const ext = newItem.item.split('.').pop()
+	  	const htmlFile = newItem.item.replace('.' + ext, '-' + ext + '.html')
+//	  	window.location.href = "https://art.stremio.com/items/"+encodeURIComponent(htmlFile)
+	  	window.location.href = encodeURIComponent(htmlFile)
+	  	return false
+	  }
+
+	 $('.modal-next-button').click(function(ev) {
+	 	switchItem(ev, 1)
+	 })
+
+	 $('.modal-prev-button').click(function(ev) {
+	 	switchItem(ev, -1)
+	 })
+
+	$(document).keyup(function(ev) {
+		if (ev.which == 39)
+			switchItem(ev, 1)			
+		else if (ev.which == 37)
+			switchItem(ev, -1)
+		else if (ev.which == 32 && $('.micromodal-slide').hasClass('is-open'))
+			$('.like-button.is-modal').click()
+	});
+
+})
+
+
+  </script>
+</body>
+</html>
