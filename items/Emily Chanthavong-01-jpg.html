@@ -239,7 +239,6 @@ $(document).ready(function() {
 	  	const newItem = listWithVotes[idx+direction]
 	  	const ext = newItem.item.split('.').pop()
 	  	const htmlFile = newItem.item.replace('.' + ext, '-' + ext + '.html')
-//	  	window.location.href = "https://art.stremio.com/items/"+encodeURIComponent(htmlFile)
 	  	window.location.href = encodeURIComponent(htmlFile)
 	  	return false
 	  }
@@ -267,6 +266,10 @@ $(document).ready(function() {
 
 	$(document).on('swiperight',ev => {
 		switchItem(ev, -1)
+	})
+
+	$('.modal__close').click(ev => {
+		window.location.href = 'https://art.stremio.com/'
 	})
 
 })
