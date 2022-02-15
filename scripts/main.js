@@ -1,6 +1,8 @@
 
 MicroModal.init()
 
+const host = 'https://art.stremio.com/'
+
 let print = ''
 
 try {
@@ -64,7 +66,7 @@ function openModal(item) {
 			$('.modal__footer .modal-prev-button').show()
 		}
 		MicroModal.show('modal-1')
-		history.pushState({}, null, 'https://art.stremio.com/items/' + itemToHtmlPage(item))
+		history.replaceState(null, null, host + 'items/' + itemToHtmlPage(item))
 	})
 }
 
@@ -125,14 +127,6 @@ $(window).on('load', function() {
 
 let allBumps = {}
 
-window.addEventListener('pageshow', ev => {
-  var historyTraversal = ev.persisted || 
-                         ( typeof window.performance != "undefined" && 
-                              window.performance.navigation.type === 2 )
-  if (historyTraversal)
-    window.location.reload()
-})
-
 $(document).ready(function() {
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
@@ -162,7 +156,7 @@ $(document).ready(function() {
 	$('.share-button').click(function(ev) {
 		ev.preventDefault()
 		const item = $(this).attr('data-item')
-		const shareLink = 'https://art.stremio.com/items/' + itemToHtmlPage(item)
+		const shareLink = host + 'items/' + itemToHtmlPage(item)
 		copyLink(shareLink)
 		return false
 	})
@@ -262,7 +256,8 @@ $(document).ready(function() {
 		})
 		if (newItem) {
 			const newKey = $(newItem).attr('data-item')
-			openModal(newKey)
+			window.location = host + 'items/' + itemToHtmlPage(newKey)
+//			openModal(newKey)
 		}
 		return false
 	}
@@ -270,7 +265,7 @@ $(document).ready(function() {
 	$('.modal-prev-button').click(ev => { switchItem(ev, -1) })
 	$(document).keyup(function(ev) {
 		if (ev.which == 39)
-			switchItem(ev, 1)			
+			switchItem(ev, 1)
 		else if (ev.which == 37)
 			switchItem(ev, -1)
 		else if (ev.which == 32 && $('.micromodal-slide').hasClass('is-open'))
@@ -286,6 +281,6 @@ $(document).ready(function() {
 	})
 
 	$('.modal__close').click(ev => {
-		history.pushState({}, null, 'https://art.stremio.com/')
+		history.replaceState(null, null, host)
 	})
 })
