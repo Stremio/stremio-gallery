@@ -40,6 +40,24 @@ function openModal(item) {
 		const isLiked = !!(localStorage && localStorage.getItem(item))
 		$('.modal__footer .like-button .user-buttons')[(isLiked ? 'add' : 'remove') + 'Class']('liked')
 		// give a bit of time so we don't see the image flicker when we change it
+		const foundItem = window.iso.filteredItems.some((el,ij) => {
+			if ($(el.element).attr('data-item') == item) {
+				if (window.iso.filteredItems[ij+1])
+					$('.modal__footer .modal-next-button').show()
+				else
+					$('.modal__footer .modal-next-button').hide()
+				if (window.iso.filteredItems[ij-1])
+					$('.modal__footer .modal-prev-button').show()
+				else
+					$('.modal__footer .modal-prev-button').hide()
+				return true
+			}
+		})
+		if (!foundItem) {
+			// or maybe they should be hidden in this case?
+			$('.modal__footer .modal-next-button').show()
+			$('.modal__footer .modal-prev-button').show()
+		}
 		MicroModal.show('modal-1')
 	})
 }
