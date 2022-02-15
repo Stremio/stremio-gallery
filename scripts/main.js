@@ -20,10 +20,6 @@ try {
 	console.warn('Fingerprint module could not be loaded, bumping may not work properly')
 }
 
-const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
-
-const blankPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
-
 function itemToHtmlPage(item) {
 	const ext = item.split('.').pop()
 	return encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
@@ -127,12 +123,6 @@ $(document).ready(function() {
 
 		const item = $(this).attr('data-item')
 
-		if ($(this).hasClass('is-modal')) {
-			// toggle main item too
-  			const elem = $(".grid-item[data-item='"+item+"']")
-  			if (elem.length) toggleLiked(elem.find('.like-button')[0])
-		}
-
 		if ($(this).find('.user-buttons').hasClass('liked')) {
 			if (localStorage && localStorage.getItem(item))
 				localStorage.removeItem(item)
@@ -201,53 +191,5 @@ $(document).ready(function() {
 		$('html, body').animate({ scrollTop: 0 }, 'slow')
 		return false
 	})
-	function switchItem(ev, direction) {
-		ev.preventDefault()
-		if (!$('.micromodal-slide').hasClass('is-open'))
-			return false
-		const key = $('.modal-' + (direction > 0 ? 'next' : 'prev') + '-button').attr('data-item')
-		let newItem
-		window.iso.filteredItems.some((el,ij) => {
-			if ($(el.element).attr('data-item') == key) {
-				if (window.iso.filteredItems[ij+direction])
-					newItem = window.iso.filteredItems[ij+direction].element
-				return true
-			}
-		})
-		if (newItem) {
-			const newKey = $(newItem).attr('data-item')
-			window.location = host + 'items/' + itemToHtmlPage(newKey) + '?order=' + listOrder
-		}
-		return false
-	}
-	$('.modal-next-button').click(ev => { switchItem(ev, 1) })
-	$('.modal-prev-button').click(ev => { switchItem(ev, -1) })
-	$(document).keyup(function(ev) {
-		if ($('.micromodal-slide').hasClass('is-open')) {
-			if (ev.which == 39)
-				switchItem(ev, 1)
-			else if (ev.which == 37)
-				switchItem(ev, -1)
-			else if (ev.which == 32 && $('.micromodal-slide').hasClass('is-open'))
-				$('.like-button.is-modal').click()
-		}
-	})
 
-	$(document).on('swipeleft', ev => {
-		if ($('.micromodal-slide').hasClass('is-open'))
-			switchItem(ev, 1)
-	})
-
-	$(document).on('swiperight', ev => {
-		if ($('.micromodal-slide').hasClass('is-open'))
-			switchItem(ev, -1)
-	})
-
-	$('.modal__close').click(ev => {
-		history.replaceState(null, null, host)
-	})
-
-	$('.modal__close').on('tap', () => {
-		history.replaceState(null, null, host)
-	})
 })
