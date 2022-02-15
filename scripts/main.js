@@ -1,5 +1,13 @@
 
-MicroModal.init()
+Object.keys(localStorage || {}).forEach(localStorageKey => {
+	if (localStorageKey.startsWith('order__list__')) {
+		const localStorageTime = parseInt(localStorageKey.replace('order__list__',''))
+		if (localStorageTime < Date.now() - 24 * 60 * 60 * 1000) {
+			localStorage.removeItem(localStorageKey)
+			console.log('clearing old list order: ' + localStorageKey)
+		}
+	}
+})
 
 const host = 'https://art.stremio.com/'
 
@@ -21,65 +29,14 @@ function itemToHtmlPage(item) {
 	return encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
 }
 
-function openModal(item) {
-	const name = item.replace(/\.[^/.]+$/, "").split('-').join(' ')
-	// set to blank png first to avoid image flicker
-	$('.modal__content a img').attr('src', blankPng)
-	setTimeout(() => {
-		$('.modal__title').text(name)
-		if (item.toLowerCase().endsWith('.mp4')) {
-			$('#video-source').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
-			$('.preview-video-holder').show()
-			$('.modal__content .preview-image-holder').hide()
-			$('.modal__content video')[0].load()
-			setTimeout(() => { $('.modal__content video')[0].play() })
-		} else {
-			$('.modal__content .preview-image-holder').attr('href', artLoc + 'originals/'+encodeURIComponent(item))
-			$('.modal__content .preview-image-holder img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
-			$('.modal__content .preview-image-holder').show()
-			$('.preview-video-holder').hide()
-		}
-		$('.modal__footer .share-button').attr('data-item', item)
-		$('.modal__footer .like-button').attr('data-item', item)
-		$('.modal__footer .modal-prev-button').attr('data-item', item)
-		$('.modal__footer .modal-next-button').attr('data-item', item)
-		$('.modal__footer .counter').text((allBumps[item] || 0)+'')
-		const isLiked = !!(localStorage && localStorage.getItem(item))
-		$('.modal__footer .like-button .user-buttons')[(isLiked ? 'add' : 'remove') + 'Class']('liked')
-		// give a bit of time so we don't see the image flicker when we change it
-		const foundItem = window.iso.filteredItems.some((el,ij) => {
-			if ($(el.element).attr('data-item') == item) {
-				if (window.iso.filteredItems[ij+1])
-					$('.modal__footer .modal-next-button').show()
-				else
-					$('.modal__footer .modal-next-button').hide()
-				if (window.iso.filteredItems[ij-1])
-					$('.modal__footer .modal-prev-button').show()
-				else
-					$('.modal__footer .modal-prev-button').hide()
-				return true
-			}
-		})
-		if (!foundItem) {
-			// or maybe they should be hidden in this case?
-			$('.modal__footer .modal-next-button').show()
-			$('.modal__footer .modal-prev-button').show()
-		}
-		MicroModal.show('modal-1')
-		history.replaceState(null, null, host + 'items/' + itemToHtmlPage(item))
-	})
-}
-
-const urlParams = new URLSearchParams(window.location.search)
-
-const shareParam = urlParams.get('share')
-
 function copyLink(link) {
 	let copyLinkMsg = 'Copy Share Link to Clipboard: Ctrl+C, Enter'
 	if (window.isMobile)
 		copyLinkMsg = 'Copy Share Link to Clipboard: Long Press Text, Select Copy'
 	window.prompt(copyLinkMsg, link)
 }
+
+let listOrder = Date.now()
 
 function loadIsotope() {
 	isotopeLoaded = true
@@ -96,8 +53,9 @@ function loadIsotope() {
 	setTimeout(() => {
 		$('.gallery-loader').remove()
 		$('.grid').animate({ opacity: 1 }, 500)
-		if (shareParam)
-			openModal(shareParam)
+		localStorage.setItem('order__list__' + listOrder, JSON.stringify({
+			list: window.iso.filteredItems.map(el => $(el.element).attr('data-item'))
+		}))
 	})
 }
 
@@ -128,6 +86,9 @@ $(window).on('load', function() {
 let allBumps = {}
 
 $(document).ready(function() {
+	$('.grid-item').each(function(ij) {
+		$(this).find('a').attr('href', $(this).find('a').attr('href') + '?order=' + listOrder)
+	})
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
 	  .then(data => {
@@ -202,12 +163,6 @@ $(document).ready(function() {
 		}
 		return false
 	})
-	$('.open-modal').click(function(ev) {
-		ev.preventDefault()
-		const item = $(this).attr('data-item')
-		openModal(item)
-		return false
-	})
 	$('.mod-buttons').click(function(ev) {
 		ev.preventDefault()
 		if (!isotopeLoaded)
@@ -234,6 +189,11 @@ $(document).ready(function() {
 			  filter: '*'
 			})
 		}
+		setTimeout(() => {
+			localStorage.setItem('order__list__' + listOrder, JSON.stringify({
+				list: window.iso.filteredItems.map(el => $(el.element).attr('data-item'))
+			}))
+		})
 		return false
 	})
 	$('.go-to-top').click(function(ev) {
@@ -256,8 +216,7 @@ $(document).ready(function() {
 		})
 		if (newItem) {
 			const newKey = $(newItem).attr('data-item')
-			window.location = host + 'items/' + itemToHtmlPage(newKey)
-//			openModal(newKey)
+			window.location = host + 'items/' + itemToHtmlPage(newKey) + '?order=' + listOrder
 		}
 		return false
 	}
@@ -287,6 +246,7 @@ $(document).ready(function() {
 	$('.modal__close').click(ev => {
 		history.replaceState(null, null, host)
 	})
+
 	$('.modal__close').on('tap', () => {
 		history.replaceState(null, null, host)
 	})
