@@ -280,4 +280,9 @@ $(document).ready(function() {
 	$('.modal__close').click(ev => {
 		history.pushState({}, null, 'https://art.stremio.com/')
 	})
+
+    $(window).on('popstate', e => {
+        if (e.originalEvent.state !== null)
+	        window.location.reload()
+    })
 })
