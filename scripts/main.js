@@ -14,6 +14,11 @@ const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
 
 const blankPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
 
+function itemToHtmlPage(item) {
+	const ext = item.split('.').pop()
+	return encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
+}
+
 function openModal(item) {
 	const name = item.replace(/\.[^/.]+$/, "").split('-').join(' ')
 	// set to blank png first to avoid image flicker
@@ -59,6 +64,7 @@ function openModal(item) {
 			$('.modal__footer .modal-prev-button').show()
 		}
 		MicroModal.show('modal-1')
+		history.pushState({}, null, 'https://art.stremio.com/items/' + itemToHtmlPage(item))
 	})
 }
 
@@ -148,9 +154,7 @@ $(document).ready(function() {
 	$('.share-button').click(function(ev) {
 		ev.preventDefault()
 		const item = $(this).attr('data-item')
-	  	const ext = item.split('.').pop()
-	  	const htmlPage = encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
-		const shareLink = 'https://art.stremio.com/items/' + htmlPage
+		const shareLink = 'https://art.stremio.com/items/' + itemToHtmlPage(item)
 		copyLink(shareLink)
 		return false
 	})
@@ -271,5 +275,9 @@ $(document).ready(function() {
 
 	$(document).on('swiperight',ev => {
 		switchItem(ev, -1)
+	})
+
+	$('.modal__close').click(ev => {
+		history.pushState({}, null, 'https://art.stremio.com/')
 	})
 })
