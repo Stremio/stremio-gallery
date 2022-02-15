@@ -185,10 +185,13 @@ function copyLink(link) {
 
 $(document).ready(function() {
 	if ($('.preview-image-holder img').attr('src')) {
-		console.log($('.preview-image-holder img').attr('src'))
 		$('.preview-image-holder img').on('load', function() {
 		  $('.preview-loader').remove()
-		})
+		}).each(function() {
+        if (this.complete && this.naturalWidth !== 0) {
+            $(this).trigger('load')
+        }
+    })
 	}
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
