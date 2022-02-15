@@ -103,6 +103,7 @@ function initBuild(allThumbnails, allImages, allBumps) {
 												.split('{image-name}').join(name)
 												.split('{prev-url}').join(prevUrl)
 												.split('{next-url}').join(nextUrl)
+												.split('{item-href}').join('https://art.stremio.com/items/' + itemToHtmlPage(item))
 												.replace('{all-items}', JSON.stringify(allImages))
 											)
 	})
