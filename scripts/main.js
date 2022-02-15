@@ -287,4 +287,7 @@ $(document).ready(function() {
 	$('.modal__close').click(ev => {
 		history.replaceState(null, null, host)
 	})
+	$('.modal__close').on('tap', () => {
+		history.replaceState(null, null, host)
+	})
 })
