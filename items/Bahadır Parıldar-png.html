@@ -65,8 +65,8 @@
 		  </div>
         </main>
         <footer class="modal__footer">
-			<a href="Arnaud%20Casier-jpg.html"><div data-item="Bahadır Parıldar.png" class="standard-buttons modal-prev-button" style="left: 20px">←&nbsp;&nbsp;Prev</div></a>
-			<a href="Joao%20Felipe%20Krambeck%20Santos-jpg.html"><div data-item="Bahadır Parıldar.png" class="standard-buttons modal-next-button" style="right: 20px">Next&nbsp;&nbsp;→</div></a>
+			<a href="reiphantomhive1-png.html"><div data-item="Bahadır Parıldar.png" class="standard-buttons modal-prev-button" style="left: 20px">←&nbsp;&nbsp;Prev</div></a>
+			<a href="Ahsan%20Ali-jpg.html"><div data-item="Bahadır Parıldar.png" class="standard-buttons modal-next-button" style="right: 20px">Next&nbsp;&nbsp;→</div></a>
         	<center>
 				<a href="#" data-item="Bahadır Parıldar.png" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="Bahadır Parıldar.png" class="like-button is-modal"><i class="fa-solid fa-heart user-buttons"></i></a>
 				<span class="counter">&nbsp;</span>
@@ -93,6 +93,9 @@ const orderParam = urlParams.get('order')
 
 let savedItemOrder = []
 if (orderParam) {
+	try {
+		history.replaceState(null, null, host + 'items/' + itemToHtmlPage(itemKey))
+	} catch(e) {}
 	if (localStorage.getItem('order__list__' + orderParam)) {
 		if (parseInt(orderParam) < Date.now() - 24 * 60 * 60 * 1000) {
 			// older than 24h, remove
@@ -185,10 +188,13 @@ function copyLink(link) {
 
 $(document).ready(function() {
 	if ($('.preview-image-holder img').attr('src')) {
-		console.log($('.preview-image-holder img').attr('src'))
 		$('.preview-image-holder img').on('load', function() {
 		  $('.preview-loader').remove()
-		})
+		}).each(function() {
+        if (this.complete && this.naturalWidth !== 0) {
+            $(this).trigger('load')
+        }
+    })
 	}
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
