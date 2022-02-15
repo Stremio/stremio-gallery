@@ -125,6 +125,10 @@ $(window).on('load', function() {
 
 let allBumps = {}
 
+window.addEventListener('popstate', e => {
+    window.location.reload()
+})
+
 $(document).ready(function() {
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
@@ -280,8 +284,4 @@ $(document).ready(function() {
 	$('.modal__close').click(ev => {
 		history.pushState({}, null, 'https://art.stremio.com/')
 	})
-
-    $(window).on('popstate', e => {
-		window.location.reload()
-    })
 })
