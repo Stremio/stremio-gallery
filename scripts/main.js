@@ -282,7 +282,6 @@ $(document).ready(function() {
 	})
 
     $(window).on('popstate', e => {
-        if (e.originalEvent.state !== null)
-	        window.location.reload()
+		window.location.reload()
     })
 })
