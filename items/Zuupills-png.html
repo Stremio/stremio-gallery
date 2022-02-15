@@ -327,8 +327,14 @@ $(document).ready(function() {
 		switchItem(ev, 1)
 	})
 
-	$(document).on('swiperight',ev => {
+	$(document).on('swiperight', ev => {
 		switchItem(ev, -1)
+	})
+
+	$('.modal__close').click(function(ev) {
+		ev.preventDefault()
+		window.location.href = $(this).attr('href')
+		return false
 	})
 
 })
