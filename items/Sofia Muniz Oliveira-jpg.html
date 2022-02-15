@@ -291,9 +291,9 @@ $(document).ready(function() {
 	  	ev.preventDefault()
 		 	if (savedItemOrder.length) {
 		 		if (direction > 0) {
-		 			$('.modal-next-button').parent().click()
+		 			window.location.href = $('.modal-next-button').parent().attr('href')
 		 		} else {
-		 			$('.modal-prev-button').parent().click()
+		 			window.location.href = $('.modal-prev-button').parent().attr('href')
 		 		}
 		 		return false
 		 	}
@@ -307,13 +307,11 @@ $(document).ready(function() {
 	  }
 
 	 $('.modal-next-button').click(function(ev) {
-	 	if (!savedItemOrder.length)
-		 	switchItem(ev, 1)
+		 	return switchItem(ev, 1)
 	 })
 
 	 $('.modal-prev-button').click(function(ev) {
-	 	if (!savedItemOrder.length)
-		 	switchItem(ev, -1)
+		 	return switchItem(ev, -1)
 	 })
 
 	$(document).keyup(function(ev) {
