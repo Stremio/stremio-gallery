@@ -48,7 +48,7 @@
         </header>
         <main class="modal__content" id="modal-1-content">
           <a href="#" target="_blank" class="preview-image-holder" style="display: none">
-			<div class="preview-loader">
+			<div class="preview-loader" style="z-index: 1001">
 				<div class="sk-folding-cube">
 				  <div class="sk-cube1 sk-cube"></div>
 				  <div class="sk-cube2 sk-cube"></div>
@@ -187,6 +187,12 @@ function copyLink(link) {
 }
 
 $(document).ready(function() {
+	if ($('.preview-image-holder img').attr('src')) {
+		console.log($('.preview-image-holder img').attr('src'))
+		$('.preview-image-holder img').on('load', function() {
+		  $('.preview-loader').remove()
+		})
+	}
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
 	  .then(data => {
@@ -328,14 +334,6 @@ $(document).ready(function() {
 
 	$(document).on('swiperight',ev => {
 		switchItem(ev, -1)
-	})
-
-	$('.modal__close').click(ev => {
-		window.location.href = host
-	})
-
-	$('.modal__close').on('tap', () => {
-		window.location.href = host
 	})
 
 })
