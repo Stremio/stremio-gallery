@@ -192,4 +192,10 @@ $(document).ready(function() {
 		return false
 	})
 
+	$('.grid-item a.open-modal').click(function(ev) {
+		ev.preventDefault()
+		window.location.href = $(this).attr('href')
+		return false
+	})
+
 })
