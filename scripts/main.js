@@ -125,7 +125,11 @@ $(window).on('load', function() {
 
 let allBumps = {}
 
-window.addEventListener('popstate', e => {
+window.addEventListener('pageshow', ev => {
+  var historyTraversal = ev.persisted || 
+                         ( typeof window.performance != "undefined" && 
+                              window.performance.navigation.type === 2 )
+  if (historyTraversal)
     window.location.reload()
 })
 
