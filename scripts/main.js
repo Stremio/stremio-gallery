@@ -264,20 +264,24 @@ $(document).ready(function() {
 	$('.modal-next-button').click(ev => { switchItem(ev, 1) })
 	$('.modal-prev-button').click(ev => { switchItem(ev, -1) })
 	$(document).keyup(function(ev) {
-		if (ev.which == 39)
-			switchItem(ev, 1)
-		else if (ev.which == 37)
-			switchItem(ev, -1)
-		else if (ev.which == 32 && $('.micromodal-slide').hasClass('is-open'))
-			$('.like-button.is-modal').click()
+		if ($('.micromodal-slide').hasClass('is-open')) {
+			if (ev.which == 39)
+				switchItem(ev, 1)
+			else if (ev.which == 37)
+				switchItem(ev, -1)
+			else if (ev.which == 32 && $('.micromodal-slide').hasClass('is-open'))
+				$('.like-button.is-modal').click()
+		}
 	})
 
 	$(document).on('swipeleft', ev => {
-		switchItem(ev, 1)
+		if ($('.micromodal-slide').hasClass('is-open'))
+			switchItem(ev, 1)
 	})
 
-	$(document).on('swiperight',ev => {
-		switchItem(ev, -1)
+	$(document).on('swiperight', ev => {
+		if ($('.micromodal-slide').hasClass('is-open'))
+			switchItem(ev, -1)
 	})
 
 	$('.modal__close').click(ev => {
