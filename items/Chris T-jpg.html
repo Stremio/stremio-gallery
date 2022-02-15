@@ -15,7 +15,6 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">
-	<script src="../scripts/micromodal.min.js"></script>
 	<script src="../scripts/jquery-3.6.0.min.js"></script>
 	<script src="../scripts/jquery.mobile-1.5.0-rc1.min.js"></script>
 	<script src="../scripts/isMobile.js"></script>
@@ -79,7 +78,57 @@
   	</center>
   <script>
 
+const host = 'https://art.stremio.com/'
+
+function itemToHtmlPage(item) {
+	const ext = item.split('.').pop()
+	return encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
+}
+
 const itemKey = 'Chris T.jpg'
+
+const urlParams = new URLSearchParams(window.location.search)
+
+const orderParam = urlParams.get('order')
+
+let savedItemOrder = []
+if (orderParam) {
+	try {
+		history.replaceState(null, null, host + 'items/' + itemToHtmlPage(itemKey))
+	} catch(e) {}
+	if (localStorage.getItem('order__list__' + orderParam)) {
+		if (parseInt(orderParam) < Date.now() - 24 * 60 * 60 * 1000) {
+			// older than 24h, remove
+			localStorage.removeItem('order__list__' + orderParam)
+		} else {
+			try {
+				savedItemOrder = JSON.parse(localStorage.getItem('order__list__' + orderParam)).list
+			} catch(e) {}
+
+			let idx = -1
+
+			savedItemOrder.some((el, ij) => {
+				if (el == itemKey) {
+					idx = ij
+					return true
+				}
+			})
+
+			if (idx > -1) {
+				if (savedItemOrder[idx-1]) {
+					$('.modal-prev-button').parent().attr('href', itemToHtmlPage(savedItemOrder[idx-1]) + '?order=' + orderParam)
+				} else {
+					$('.modal-prev-button').parent().hide()
+				}
+				if (savedItemOrder[idx+1]) {
+					$('.modal-next-button').parent().attr('href', itemToHtmlPage(savedItemOrder[idx+1]) + '?order=' + orderParam)
+				} else {
+					$('.modal-next-button').parent().hide()
+				}
+			}
+		}
+	}
+}
 
 if (itemKey.toLowerCase().endsWith('.mp4')) {
 	document.getElementsByClassName('preview-video-holder')[0].style.display = 'block'
@@ -89,8 +138,6 @@ if (itemKey.toLowerCase().endsWith('.mp4')) {
 } else {
 	document.getElementsByClassName('preview-image-holder')[0].style.display = 'block'
 }
-
-MicroModal.init()
 
 let print = ''
 
@@ -174,16 +221,16 @@ $(document).ready(function() {
 		  		}
 		  	})
 
-		  	if (!listWithVotes[idx-1])
-		  		$('.modal-prev-button').hide()
+			 	if (!savedItemOrder.length) {
+			  	if (!listWithVotes[idx-1])
+			  		$('.modal-prev-button').hide()
 
-		  	if (!listWithVotes[idx+1])
-		  		$('.modal-next-button').hide()
+			  	if (!listWithVotes[idx+1])
+			  		$('.modal-next-button').hide()
 
-			$('.modal-next-button').parent().attr('href', '#')
-			$('.modal-prev-button').parent().attr('href', '#')
-
-		  	console.log(listWithVotes)
+					$('.modal-next-button').parent().attr('href', '#')
+					$('.modal-prev-button').parent().attr('href', '#')
+				}
 
 		  }
 	  })
@@ -232,13 +279,21 @@ $(document).ready(function() {
 		const item = $(this).attr('data-item')
 	  	const ext = item.split('.').pop()
 	  	const htmlPage = encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
-		const shareLink = 'https://art.stremio.com/items/' + htmlPage
+		const shareLink = host + 'items/' + htmlPage
 		copyLink(shareLink)
 		return false
 	})
 
 	  function switchItem(ev, direction) {
 	  	ev.preventDefault()
+		 	if (savedItemOrder.length) {
+		 		if (direction > 0) {
+		 			$('.modal-next-button').parent().click()
+		 		} else {
+		 			$('.modal-prev-button').parent().click()
+		 		}
+		 		return false
+		 	}
 	  	if (idx == -1)
 	  		return false
 	  	const newItem = listWithVotes[idx+direction]
@@ -249,11 +304,13 @@ $(document).ready(function() {
 	  }
 
 	 $('.modal-next-button').click(function(ev) {
-	 	switchItem(ev, 1)
+	 	if (!savedItemOrder.length)
+		 	switchItem(ev, 1)
 	 })
 
 	 $('.modal-prev-button').click(function(ev) {
-	 	switchItem(ev, -1)
+	 	if (!savedItemOrder.length)
+		 	switchItem(ev, -1)
 	 })
 
 	$(document).keyup(function(ev) {
@@ -274,7 +331,11 @@ $(document).ready(function() {
 	})
 
 	$('.modal__close').click(ev => {
-		window.location.href = 'https://art.stremio.com/'
+		window.location.href = host
+	})
+
+	$('.modal__close').on('tap', () => {
+		window.location.href = host
 	})
 
 })
