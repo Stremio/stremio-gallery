@@ -43,7 +43,7 @@ function initBuild(allThumbnails, allImages, allBumps) {
 	if (!fs.existsSync('./items'))
 		fs.mkdirSync('./items')
 
-	const itemFullpageTemplate = fs.readFileSync('./html-templates/item-image-fullpage.html').toString()
+	const itemFullpageTemplate = fs.readFileSync('./html-templates/item-fullpage.html').toString()
 
 	function htmlPageForItem(item) {
 	  	const ext = item.split('.').pop()
