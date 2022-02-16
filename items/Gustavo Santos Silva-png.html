@@ -66,7 +66,7 @@
 		  </div>
         </main>
         <footer class="modal__footer">
-			<a href="DanielaSchutz-mp4.html"><div data-item="Gustavo Santos Silva.png" class="standard-buttons modal-prev-button" style="left: 20px">←&nbsp;&nbsp;Prev</div></a>
+			<a href="Guilherme%20Carvalho%20Fernandes3-jpg.html"><div data-item="Gustavo Santos Silva.png" class="standard-buttons modal-prev-button" style="left: 20px">←&nbsp;&nbsp;Prev</div></a>
 			<a href="Lao%20Yao-png.html"><div data-item="Gustavo Santos Silva.png" class="standard-buttons modal-next-button" style="right: 20px">Next&nbsp;&nbsp;→</div></a>
         	<center>
 				<a href="#" data-item="Gustavo Santos Silva.png" class="share-button"><i class="fa-solid fa-share-nodes user-buttons"></i></a><a href="#" data-item="Gustavo Santos Silva.png" class="like-button is-modal"><i class="fa-solid fa-heart user-buttons"></i></a>
@@ -300,9 +300,9 @@ $(document).ready(function() {
 	  	ev.preventDefault()
 		 	if (savedItemOrder.length) {
 		 		if (direction > 0) {
-		 			window.location.href = $('.modal-next-button').parent().attr('href')
+		 			window.location.assign($('.modal-next-button').parent().attr('href'))
 		 		} else {
-		 			window.location.href = $('.modal-prev-button').parent().attr('href')
+		 			window.location.assign($('.modal-prev-button').parent().attr('href'))
 		 		}
 		 		return false
 		 	}
@@ -311,17 +311,13 @@ $(document).ready(function() {
 	  	const newItem = listWithVotes[idx+direction]
 	  	const ext = newItem.item.split('.').pop()
 	  	const htmlFile = newItem.item.replace('.' + ext, '-' + ext + '.html')
-	  	window.location.href = encodeURIComponent(htmlFile)
+	  	window.location.assign(encodeURIComponent(htmlFile))
 	  	return false
 	  }
+	  
+	 $('.modal-next-button').click(ev => switchItem(ev, 1))
 
-	 $('.modal-next-button').click(function(ev) {
-		 	return switchItem(ev, 1)
-	 })
-
-	 $('.modal-prev-button').click(function(ev) {
-		 	return switchItem(ev, -1)
-	 })
+	 $('.modal-prev-button').click(ev => switchItem(ev, -1))
 
 	$(document).keyup(function(ev) {
 		if (ev.which == 39)
@@ -332,17 +328,13 @@ $(document).ready(function() {
 			$('.like-button.is-modal').click()
 	})
 
-	$(document).on('swipeleft', ev => {
-		switchItem(ev, 1)
-	})
+	$(document).on('swipeleft', ev => switchItem(ev, 1))
 
-	$(document).on('swiperight', ev => {
-		switchItem(ev, -1)
-	})
+	$(document).on('swiperight', ev => switchItem(ev, -1))
 
 	$('.modal__close').click(function(ev) {
 		ev.preventDefault()
-		window.location.href = $(this).attr('href')
+		window.location.assign($(this).attr('href'))
 		return false
 	})
 
