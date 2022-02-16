@@ -9,13 +9,13 @@
 	<meta name="application-name" content="{image-name} - Stremio Art Gallery">
 	<meta name="author" content="Stremio">
 	<meta property="og:image" content="{item-thumb}">
+	<meta property="og:url" content="{item-href}" />
 	<link rel="icon" type="image/png" sizes="32x32" href="https://www.stremio.com/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="https://www.stremio.com/favicon-96x96.png">
 	<title>{image-name} - Stremio Art Gallery</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet">
-	<script src="../scripts/micromodal.min.js"></script>
 	<script src="../scripts/jquery-3.6.0.min.js"></script>
 	<script src="../scripts/jquery.mobile-1.5.0-rc1.min.js"></script>
 	<script src="../scripts/isMobile.js"></script>
@@ -48,8 +48,8 @@
           <a href="https://art.stremio.com/" class="standard-buttons modal__close"><i class="fa-solid fa-house-chimney user-buttons"></i>Stremio Gallery</a>
         </header>
         <main class="modal__content" id="modal-1-content">
-          <a href="#" target="_blank" class="preview-image-holder" style="display: none">
-			<div class="preview-loader">
+          <a href="{image-url}" target="_blank" class="preview-image-holder" style="display: none">
+			<div class="preview-loader" style="z-index: 1001">
 				<div class="sk-folding-cube">
 				  <div class="sk-cube1 sk-cube"></div>
 				  <div class="sk-cube2 sk-cube"></div>
@@ -79,18 +79,67 @@
   	</center>
   <script>
 
+const host = 'https://art.stremio.com/'
+
+function itemToHtmlPage(item) {
+	const ext = item.split('.').pop()
+	return encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
+}
+
 const itemKey = '{item-name}'
+
+const urlParams = new URLSearchParams(window.location.search)
+
+const orderParam = urlParams.get('order')
+
+let savedItemOrder = []
+if (orderParam) {
+	if (localStorage.getItem('order__list__' + orderParam)) {
+		if (parseInt(orderParam) < Date.now() - 24 * 60 * 60 * 1000) {
+			// older than 24h, remove
+			localStorage.removeItem('order__list__' + orderParam)
+		} else {
+			try {
+				savedItemOrder = JSON.parse(localStorage.getItem('order__list__' + orderParam)).list
+			} catch(e) {}
+
+			let idx = -1
+
+			savedItemOrder.some((el, ij) => {
+				if (el == itemKey) {
+					idx = ij
+					return true
+				}
+			})
+
+			if (idx > -1) {
+				if (savedItemOrder[idx-1]) {
+					$('.modal-prev-button').parent().attr('href', itemToHtmlPage(savedItemOrder[idx-1]) + '?order=' + orderParam)
+				} else {
+					$('.modal-prev-button').parent().hide()
+				}
+				if (savedItemOrder[idx+1]) {
+					$('.modal-next-button').parent().attr('href', itemToHtmlPage(savedItemOrder[idx+1]) + '?order=' + orderParam)
+				} else {
+					$('.modal-next-button').parent().hide()
+				}
+			}
+		}
+	}
+}
 
 if (itemKey.toLowerCase().endsWith('.mp4')) {
 	document.getElementsByClassName('preview-video-holder')[0].style.display = 'block'
 	$('.modal__content video')[0].load()
 		setTimeout(() => { $('.modal__content video')[0].play() })
 
+} else if (itemKey.toLowerCase().endsWith('.gif')) {
+	document.getElementsByClassName('preview-image-holder')[0].style.display = 'block'
+	// remove loader for gif
+	 $('.preview-loader').remove()
 } else {
 	document.getElementsByClassName('preview-image-holder')[0].style.display = 'block'
 }
-
-MicroModal.init()
 
 let print = ''
 
@@ -140,6 +189,16 @@ function copyLink(link) {
 }
 
 $(document).ready(function() {
+	if ($('.preview-image-holder img').attr('src')) {
+		$('.preview-image-holder img').on('load', function() {
+			if ($('.preview-loader').length)
+			  $('.preview-loader').remove()
+		}).each(function() {
+        if (this.complete && this.naturalWidth !== 0) {
+            $(this).trigger('load')
+        }
+    })
+	}
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
 	  .then(data => {
@@ -174,16 +233,16 @@ $(document).ready(function() {
 		  		}
 		  	})
 
-		  	if (!listWithVotes[idx-1])
-		  		$('.modal-prev-button').hide()
+			 	if (!savedItemOrder.length) {
+			  	if (!listWithVotes[idx-1])
+			  		$('.modal-prev-button').hide()
 
-		  	if (!listWithVotes[idx+1])
-		  		$('.modal-next-button').hide()
+			  	if (!listWithVotes[idx+1])
+			  		$('.modal-next-button').hide()
 
-			$('.modal-next-button').parent().attr('href', '#')
-			$('.modal-prev-button').parent().attr('href', '#')
-
-		  	console.log(listWithVotes)
+					$('.modal-next-button').parent().attr('href', '#')
+					$('.modal-prev-button').parent().attr('href', '#')
+				}
 
 		  }
 	  })
@@ -232,13 +291,21 @@ $(document).ready(function() {
 		const item = $(this).attr('data-item')
 	  	const ext = item.split('.').pop()
 	  	const htmlPage = encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
-		const shareLink = 'https://art.stremio.com/items/' + htmlPage
+		const shareLink = host + 'items/' + htmlPage
 		copyLink(shareLink)
 		return false
 	})
 
 	  function switchItem(ev, direction) {
 	  	ev.preventDefault()
+		 	if (savedItemOrder.length) {
+		 		if (direction > 0) {
+		 			window.location.href = $('.modal-next-button').parent().attr('href')
+		 		} else {
+		 			window.location.href = $('.modal-prev-button').parent().attr('href')
+		 		}
+		 		return false
+		 	}
 	  	if (idx == -1)
 	  		return false
 	  	const newItem = listWithVotes[idx+direction]
@@ -249,11 +316,11 @@ $(document).ready(function() {
 	  }
 
 	 $('.modal-next-button').click(function(ev) {
-	 	switchItem(ev, 1)
+		 	return switchItem(ev, 1)
 	 })
 
 	 $('.modal-prev-button').click(function(ev) {
-	 	switchItem(ev, -1)
+		 	return switchItem(ev, -1)
 	 })
 
 	$(document).keyup(function(ev) {
@@ -269,12 +336,14 @@ $(document).ready(function() {
 		switchItem(ev, 1)
 	})
 
-	$(document).on('swiperight',ev => {
+	$(document).on('swiperight', ev => {
 		switchItem(ev, -1)
 	})
 
-	$('.modal__close').click(ev => {
-		window.location.href = 'https://art.stremio.com/'
+	$('.modal__close').click(function(ev) {
+		ev.preventDefault()
+		window.location.href = $(this).attr('href')
+		return false
 	})
 
 })

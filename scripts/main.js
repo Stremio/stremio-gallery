@@ -1,5 +1,13 @@
 
-MicroModal.init()
+Object.keys(localStorage || {}).forEach(localStorageKey => {
+	if (localStorageKey.startsWith('order__list__')) {
+		const localStorageTime = parseInt(localStorageKey.replace('order__list__',''))
+		if (localStorageTime < Date.now() - 24 * 60 * 60 * 1000) {
+			localStorage.removeItem(localStorageKey)
+			console.log('clearing old list order: ' + localStorageKey)
+		}
+	}
+})
 
 const host = 'https://art.stremio.com/'
 
@@ -12,67 +20,10 @@ try {
 	console.warn('Fingerprint module could not be loaded, bumping may not work properly')
 }
 
-const artLoc = 'https://github.com/Stremio/stremio-art/raw/main/'
-
-const blankPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
-
 function itemToHtmlPage(item) {
 	const ext = item.split('.').pop()
 	return encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
 }
-
-function openModal(item) {
-	const name = item.replace(/\.[^/.]+$/, "").split('-').join(' ')
-	// set to blank png first to avoid image flicker
-	$('.modal__content a img').attr('src', blankPng)
-	setTimeout(() => {
-		$('.modal__title').text(name)
-		if (item.toLowerCase().endsWith('.mp4')) {
-			$('#video-source').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
-			$('.preview-video-holder').show()
-			$('.modal__content .preview-image-holder').hide()
-			$('.modal__content video')[0].load()
-			setTimeout(() => { $('.modal__content video')[0].play() })
-		} else {
-			$('.modal__content .preview-image-holder').attr('href', artLoc + 'originals/'+encodeURIComponent(item))
-			$('.modal__content .preview-image-holder img').attr('src', artLoc + 'originals/'+encodeURIComponent(item))
-			$('.modal__content .preview-image-holder').show()
-			$('.preview-video-holder').hide()
-		}
-		$('.modal__footer .share-button').attr('data-item', item)
-		$('.modal__footer .like-button').attr('data-item', item)
-		$('.modal__footer .modal-prev-button').attr('data-item', item)
-		$('.modal__footer .modal-next-button').attr('data-item', item)
-		$('.modal__footer .counter').text((allBumps[item] || 0)+'')
-		const isLiked = !!(localStorage && localStorage.getItem(item))
-		$('.modal__footer .like-button .user-buttons')[(isLiked ? 'add' : 'remove') + 'Class']('liked')
-		// give a bit of time so we don't see the image flicker when we change it
-		const foundItem = window.iso.filteredItems.some((el,ij) => {
-			if ($(el.element).attr('data-item') == item) {
-				if (window.iso.filteredItems[ij+1])
-					$('.modal__footer .modal-next-button').show()
-				else
-					$('.modal__footer .modal-next-button').hide()
-				if (window.iso.filteredItems[ij-1])
-					$('.modal__footer .modal-prev-button').show()
-				else
-					$('.modal__footer .modal-prev-button').hide()
-				return true
-			}
-		})
-		if (!foundItem) {
-			// or maybe they should be hidden in this case?
-			$('.modal__footer .modal-next-button').show()
-			$('.modal__footer .modal-prev-button').show()
-		}
-		MicroModal.show('modal-1')
-		history.replaceState(null, null, host + 'items/' + itemToHtmlPage(item))
-	})
-}
-
-const urlParams = new URLSearchParams(window.location.search)
-
-const shareParam = urlParams.get('share')
 
 function copyLink(link) {
 	let copyLinkMsg = 'Copy Share Link to Clipboard: Ctrl+C, Enter'
@@ -80,6 +31,8 @@ function copyLink(link) {
 		copyLinkMsg = 'Copy Share Link to Clipboard: Long Press Text, Select Copy'
 	window.prompt(copyLinkMsg, link)
 }
+
+let listOrder = Date.now()
 
 function loadIsotope() {
 	isotopeLoaded = true
@@ -96,8 +49,9 @@ function loadIsotope() {
 	setTimeout(() => {
 		$('.gallery-loader').remove()
 		$('.grid').animate({ opacity: 1 }, 500)
-		if (shareParam)
-			openModal(shareParam)
+		localStorage.setItem('order__list__' + listOrder, JSON.stringify({
+			list: window.iso.filteredItems.map(el => $(el.element).attr('data-item'))
+		}))
 	})
 }
 
@@ -128,6 +82,9 @@ $(window).on('load', function() {
 let allBumps = {}
 
 $(document).ready(function() {
+	$('.grid-item').each(function(ij) {
+		$(this).find('a').attr('href', $(this).find('a').attr('href') + '?order=' + listOrder)
+	})
 	fetch('https://bumper.stremio.workers.dev/get')
 	  .then(response => response.json())
 	  .then(data => {
@@ -166,12 +123,6 @@ $(document).ready(function() {
 
 		const item = $(this).attr('data-item')
 
-		if ($(this).hasClass('is-modal')) {
-			// toggle main item too
-  			const elem = $(".grid-item[data-item='"+item+"']")
-  			if (elem.length) toggleLiked(elem.find('.like-button')[0])
-		}
-
 		if ($(this).find('.user-buttons').hasClass('liked')) {
 			if (localStorage && localStorage.getItem(item))
 				localStorage.removeItem(item)
@@ -202,12 +153,6 @@ $(document).ready(function() {
 		}
 		return false
 	})
-	$('.open-modal').click(function(ev) {
-		ev.preventDefault()
-		const item = $(this).attr('data-item')
-		openModal(item)
-		return false
-	})
 	$('.mod-buttons').click(function(ev) {
 		ev.preventDefault()
 		if (!isotopeLoaded)
@@ -234,6 +179,11 @@ $(document).ready(function() {
 			  filter: '*'
 			})
 		}
+		setTimeout(() => {
+			localStorage.setItem('order__list__' + listOrder, JSON.stringify({
+				list: window.iso.filteredItems.map(el => $(el.element).attr('data-item'))
+			}))
+		})
 		return false
 	})
 	$('.go-to-top').click(function(ev) {
@@ -241,50 +191,11 @@ $(document).ready(function() {
 		$('html, body').animate({ scrollTop: 0 }, 'slow')
 		return false
 	})
-	function switchItem(ev, direction) {
+
+	$('.grid-item a.open-modal').click(function(ev) {
 		ev.preventDefault()
-		if (!$('.micromodal-slide').hasClass('is-open'))
-			return false
-		const key = $('.modal-' + (direction > 0 ? 'next' : 'prev') + '-button').attr('data-item')
-		let newItem
-		window.iso.filteredItems.some((el,ij) => {
-			if ($(el.element).attr('data-item') == key) {
-				if (window.iso.filteredItems[ij+direction])
-					newItem = window.iso.filteredItems[ij+direction].element
-				return true
-			}
-		})
-		if (newItem) {
-			const newKey = $(newItem).attr('data-item')
-			window.location = host + 'items/' + itemToHtmlPage(newKey)
-//			openModal(newKey)
-		}
+		window.location.href = $(this).attr('href')
 		return false
-	}
-	$('.modal-next-button').click(ev => { switchItem(ev, 1) })
-	$('.modal-prev-button').click(ev => { switchItem(ev, -1) })
-	$(document).keyup(function(ev) {
-		if ($('.micromodal-slide').hasClass('is-open')) {
-			if (ev.which == 39)
-				switchItem(ev, 1)
-			else if (ev.which == 37)
-				switchItem(ev, -1)
-			else if (ev.which == 32 && $('.micromodal-slide').hasClass('is-open'))
-				$('.like-button.is-modal').click()
-		}
 	})
 
-	$(document).on('swipeleft', ev => {
-		if ($('.micromodal-slide').hasClass('is-open'))
-			switchItem(ev, 1)
-	})
-
-	$(document).on('swiperight', ev => {
-		if ($('.micromodal-slide').hasClass('is-open'))
-			switchItem(ev, -1)
-	})
-
-	$('.modal__close').click(ev => {
-		history.replaceState(null, null, host)
-	})
 })

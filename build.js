@@ -3,6 +3,11 @@ const needle = require('needle')
 
 const artRepo = 'Stremio/stremio-art'
 
+function itemToHtmlPage(item) {
+	const ext = item.split('.').pop()
+	return encodeURIComponent(item.replace('.' + ext, '-' + ext + '.html'))
+}
+
 function initBuild(allThumbnails, allImages, allBumps) {
 	const artRemote = 'https://github.com/'+artRepo+'/raw/main/'
 
@@ -20,6 +25,7 @@ function initBuild(allThumbnails, allImages, allBumps) {
 					.split('{item-name}').join(item)
 					.replace('{image-url}', artRemote + (hasThumb ? 'thumbnails' : 'originals') + '/' + encodeURIComponent(item))
 					.replace('{image-name}', name)
+					.replace('{item-href}', 'https://art.stremio.com/items/' + itemToHtmlPage(item))
 		} else if (['mp4'].includes(extension)) {
 			return videoTemplate
 					.split('{item-name}').join(item)
@@ -37,7 +43,7 @@ function initBuild(allThumbnails, allImages, allBumps) {
 	if (!fs.existsSync('./items'))
 		fs.mkdirSync('./items')
 
-	const itemFullpageTemplate = fs.readFileSync('./html-templates/item-image-fullpage.html').toString()
+	const itemFullpageTemplate = fs.readFileSync('./html-templates/item-fullpage.html').toString()
 
 	function htmlPageForItem(item) {
 	  	const ext = item.split('.').pop()
@@ -97,6 +103,7 @@ function initBuild(allThumbnails, allImages, allBumps) {
 												.split('{image-name}').join(name)
 												.split('{prev-url}').join(prevUrl)
 												.split('{next-url}').join(nextUrl)
+												.split('{item-href}').join('https://art.stremio.com/items/' + itemToHtmlPage(item))
 												.replace('{all-items}', JSON.stringify(allImages))
 											)
 	})
