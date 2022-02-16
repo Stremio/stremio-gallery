@@ -194,7 +194,7 @@ $(document).ready(function() {
 
 	$('.grid-item a.open-modal').click(function(ev) {
 		ev.preventDefault()
-		window.location.href = $(this).attr('href')
+		window.location.assign($(this).attr('href'))
 		return false
 	})
 
