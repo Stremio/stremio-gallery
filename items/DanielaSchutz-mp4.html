@@ -133,6 +133,10 @@ if (itemKey.toLowerCase().endsWith('.mp4')) {
 	$('.modal__content video')[0].load()
 		setTimeout(() => { $('.modal__content video')[0].play() })
 
+} else if (itemKey.toLowerCase().endsWith('.gif')) {
+	document.getElementsByClassName('preview-image-holder')[0].style.display = 'block'
+	// remove loader for gif
+	 $('.preview-loader').remove()
 } else {
 	document.getElementsByClassName('preview-image-holder')[0].style.display = 'block'
 }
@@ -187,7 +191,8 @@ function copyLink(link) {
 $(document).ready(function() {
 	if ($('.preview-image-holder img').attr('src')) {
 		$('.preview-image-holder img').on('load', function() {
-		  $('.preview-loader').remove()
+			if ($('.preview-loader').length)
+			  $('.preview-loader').remove()
 		}).each(function() {
         if (this.complete && this.naturalWidth !== 0) {
             $(this).trigger('load')
